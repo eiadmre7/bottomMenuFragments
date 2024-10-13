@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-public class ListFragment extends Fragment implements StoneAdapter.ItemSelected{
+public class ListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private StoneAdapter adapter;
@@ -32,11 +32,8 @@ public class ListFragment extends Fragment implements StoneAdapter.ItemSelected{
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new StoneAdapter(getContext(),stones);
-
-            recyclerView.setAdapter(adapter);
-
-            // ... (Load data and update adapter)
-            return view;
+        recyclerView.setAdapter(adapter);
+        return view;
         }
 
     private void initImagesArray() {
@@ -59,11 +56,5 @@ public class ListFragment extends Fragment implements StoneAdapter.ItemSelected{
         for (int i = 0; i <images.length ; i++) {
             stones.get(i).setImg(images[i]);
         }
-    }
-
-
-    @Override
-    public void onItemSelected(int index) {
-
     }
 }

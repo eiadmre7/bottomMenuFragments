@@ -6,7 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
+    <FrameLayout
+        android:id="@+id/LoginFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomnavigation"/>
     <FrameLayout
         android:id="@+id/HomeFrame"
         android:layout_width="match_parent"
@@ -22,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bottomnavigation"
-        app:menu="@menu/buttom_nan_menu"
+        app:menu="@menu/buttom_nav_menu"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

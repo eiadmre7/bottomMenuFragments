@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private LoginFrag loginFrag;
+    public static boolean isLoggedIn=false;
     private DashBoardFrag dashBoardFrag;
     private HomeFrag homeFrag;
     public static FrameLayout loginFrame, homeFrame, dashboardFrame;
@@ -42,20 +43,20 @@ public class MainActivity extends AppCompatActivity {
         bottomnavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId()==R.id.menu_home) {
+                if (item.getItemId()==R.id.menu_home && isLoggedIn) {
                     // Show Home fragment
                     dashboardFrame.setVisibility(View.INVISIBLE);
                     loginFrame.setVisibility(View.INVISIBLE);
                     homeFrame.setVisibility(View.VISIBLE);
                 }
-                if (item.getItemId()==R.id.menu_dashboard)
+                if (item.getItemId()==R.id.menu_dashboard && isLoggedIn)
                      {
                         // Show Dashboard fragment
                         homeFrame.setVisibility(View.INVISIBLE);
                         loginFrame.setVisibility(View.INVISIBLE);
                         dashboardFrame.setVisibility(View.VISIBLE);
                 }
-                if (item.getItemId()==R.id.menu_login) {
+                if (item.getItemId()==R.id.menu_login && !isLoggedIn) {
                     // Show Login fragment
                     homeFrame.setVisibility(View.INVISIBLE);
                     dashboardFrame.setVisibility(View.INVISIBLE);

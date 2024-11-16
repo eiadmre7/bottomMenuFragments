@@ -17,11 +17,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFrag extends Fragment {
-    private TextInputEditText et_name, et_password;
+    private TextInputEditText et_email, et_password;
     private Button btn_submit;
-    private FirebaseAuth auth;
+    public static FirebaseAuth mAuth;
 
     public LoginFrag() {
         // Required empty public constructor
@@ -30,44 +31,59 @@ public class LoginFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        auth = FirebaseAuth.getInstance();
+       mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        et_name = view.findViewById(R.id.et_email);
-        et_password = view.findViewById(R.id.et_password);
-        btn_submit = view.findViewById(R.id.btn_submit);
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chekUserPass();
-            }
-        });
-        return view;
+       View view= inflater.inflate(R.layout.fragment_login, container, false);
+       et_email=view.findViewById(R.id.et_email);
+       et_password=view.findViewById(R.id.et_password);
+       btn_submit=view.findViewById(R.id.btn_submit);
+       btn_submit.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               checkEmailPass();
+           }
+       });
+       return view;
     }
 
-    private void chekUserPass() {
-        String email = et_name.getText().toString();
-        String pass = et_password.getText().toString();
-        auth.signInWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(getActivity(), "Login Successfully", Toast.LENGTH_SHORT).show();
-                            Log.d("TAG", "signInWithEmail:success");
-                            updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            updateUI();
+        }
+    }
+
+    private void checkEmailPass() {
+        String email,password;
+        email=et_email.getText().toString();
+        password=et_password.getText().toString();
+        if(!(email.equals("") || password.equals(""))){
+            mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
+                        Toast.makeText(getActivity(), "login successful", Toast.LENGTH_SHORT).show();
+                        updateUI();
                     }
-                });
+                    else
+                        Toast.makeText(getActivity(), "login failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else
+            Toast.makeText(getActivity(), "please fill in fields..", Toast.LENGTH_SHORT).show();
     }
 
     private void updateUI() {
+        et_email.setText(null);
+        et_password.setText(null);
+        MainActivity.isLoggedIn=true;
+        MainActivity.loginFrame.setVisibility(View.INVISIBLE);
         MainActivity.homeFrame.setVisibility(View.VISIBLE);
+        MainActivity.dashboardFrame.setVisibility(View.INVISIBLE);
     }
+
 }

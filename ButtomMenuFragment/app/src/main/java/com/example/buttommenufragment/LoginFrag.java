@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFrag extends Fragment {
     private TextInputEditText et_email, et_password;
     private Button btn_submit;
-    public static FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     public LoginFrag() {
         // Required empty public constructor

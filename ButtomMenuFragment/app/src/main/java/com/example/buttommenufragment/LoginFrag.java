@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFrag extends Fragment {
     private TextInputEditText et_email, et_password;
-    private Button btn_submit;
-    public static FirebaseAuth mAuth;
+    private Button btn_submit,btn_signup;
+    private FirebaseAuth mAuth;
 
     public LoginFrag() {
         // Required empty public constructor
@@ -43,7 +45,62 @@ public class LoginFrag extends Fragment {
                checkEmailPass();
            }
        });
+       btn_signup=view.findViewById(R.id.btn_Signup);
+       btn_signup.setOnClickListener(View->SignUp());
        return view;
+    }
+    public static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+    private void SignUp() {
+        String email,password;
+        email=et_email.getText().toString();
+        if(!(isValidEmail(email))){
+            Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
+            et_email.setError("Invalid Email");
+            et_email.requestFocus();
+            return;
+        }
+        password=et_password.getText().toString();
+        if(checkPassword(password)){
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Toast.makeText(getActivity(), "Sign up success.",
+                                        Toast.LENGTH_SHORT).show();
+                                FirebaseUser user;
+                                user = mAuth.getCurrentUser();
+                                updateUI();
+                            }
+                            else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(getActivity(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private boolean checkPassword(String password) {
+        if (password.length() < 6){
+            Toast.makeText(getActivity(), "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        int c_digit=0, c_upper=0, c_lower=0;
+        for (char c:password.toCharArray()) {
+            if (Character.isDigit(c)) c_digit++;
+            else if (Character.isUpperCase(c)) c_upper++;
+            else if (Character.isLowerCase(c)) c_lower++;
+        }
+        if (c_digit==0 || c_upper==0 || c_lower==0){
+            Toast.makeText(getActivity(), "Password must contain at least one digit, one uppercase letter, and one lowercase letter", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     @Override

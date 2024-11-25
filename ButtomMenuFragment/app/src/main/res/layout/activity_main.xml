@@ -12,6 +12,11 @@
         android:layout_height="match_parent"
         android:layout_above="@id/bottomnavigation"/>
     <FrameLayout
+        android:id="@+id/SignupFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomnavigation"/>
+    <FrameLayout
         android:id="@+id/HomeFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

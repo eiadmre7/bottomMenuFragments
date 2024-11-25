@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginFrag extends Fragment {
     private TextInputEditText et_email, et_password;
     private Button btn_submit,btn_signup;
+    private TextView tvSignup;
     private FirebaseAuth mAuth;
 
     public LoginFrag() {
@@ -36,8 +38,8 @@ public class LoginFrag extends Fragment {
        mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
        View view= inflater.inflate(R.layout.fragment_login, container, false);
-       et_email=view.findViewById(R.id.et_email);
-       et_password=view.findViewById(R.id.et_password);
+       et_email=view.findViewById(R.id.et_Email);
+       et_password=view.findViewById(R.id.et_Password);
        btn_submit=view.findViewById(R.id.btn_submit);
        btn_submit.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -45,44 +47,18 @@ public class LoginFrag extends Fragment {
                checkEmailPass();
            }
        });
-       btn_signup=view.findViewById(R.id.btn_Signup);
-       btn_signup.setOnClickListener(View->SignUp());
+       tvSignup=view.findViewById(R.id.tv_Signup);
+       tvSignup.setOnClickListener(View->SignUp());
        return view;
     }
     public static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
     private void SignUp() {
-        String email,password;
-        email=et_email.getText().toString();
-        if(!(isValidEmail(email))){
-            Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
-            et_email.setError("Invalid Email");
-            et_email.requestFocus();
-            return;
-        }
-        password=et_password.getText().toString();
-        if(checkPassword(password)){
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(getActivity(), "Sign up success.",
-                                        Toast.LENGTH_SHORT).show();
-                                FirebaseUser user;
-                                user = mAuth.getCurrentUser();
-                                updateUI();
-                            }
-                            else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(getActivity(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
+        MainActivity.loginFrame.setVisibility(View.INVISIBLE);
+        MainActivity.homeFrame.setVisibility(View.INVISIBLE);
+        MainActivity.dashboardFrame.setVisibility(View.INVISIBLE);
+        MainActivity.signUpFrame.setVisibility(View.VISIBLE);
     }
 
     private boolean checkPassword(String password) {

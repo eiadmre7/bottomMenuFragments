@@ -18,14 +18,14 @@
             android:textSize="50sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/et_username"
+            android:id="@+id/et_userName"
             android:hint="Email"
             android:layout_below="@+id/tv_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email"
+                android:id="@+id/et_Email"
                 android:layout_margin="10dp"
                 android:textColor="@color/white"
                 android:layout_width="match_parent"
@@ -35,11 +35,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_password"
             android:hint="Password"
-            android:layout_below="@+id/et_username"
+            android:layout_below="@+id/et_userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_password"
+                android:id="@+id/et_Password"
                 android:layout_margin="10dp"
                 android:textColor="@color/white"
                 android:inputType="textPassword"
@@ -56,16 +56,18 @@
             android:text="LogIn"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/text_input_password" />
-        <Button
-            android:id="@+id/btn_Signup"
+
+        <TextView
+            android:id="@+id/tv_Signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="SignUp"
+            android:layout_below="@+id/btn_submit"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/btn_submit" />
-
-
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/angkor"
+            android:text="new user ? SignUp here.."
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

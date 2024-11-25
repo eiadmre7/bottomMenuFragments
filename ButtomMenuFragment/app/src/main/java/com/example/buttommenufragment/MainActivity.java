@@ -15,13 +15,15 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isLoggedIn=false;
     private DashBoardFrag dashBoardFrag;
     private HomeFrag homeFrag;
-    public static FrameLayout loginFrame, homeFrame, dashboardFrame;
+    private SignupFragment signupFragment;
+    public static FrameLayout loginFrame,signUpFrame, homeFrame, dashboardFrame;
     private BottomNavigationView bottomnavigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loginFrame=findViewById(R.id.LoginFrame);
+        signUpFrame=findViewById(R.id.SignupFrame);
         homeFrame=findViewById(R.id.HomeFrame);
         dashboardFrame=findViewById(R.id.dashboardFrame);
         bottomnavigation=findViewById(R.id.bottomnavigation);
@@ -35,10 +37,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.dashboardFrame, dashBoardFrag).commit();
         loginFrag = new LoginFrag();
         getSupportFragmentManager().beginTransaction().replace(R.id.LoginFrame, loginFrag).commit();
+        signupFragment = new SignupFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.SignupFrame, signupFragment).commit();
 
         // Hide other fragments initially
         dashboardFrame.setVisibility(View.INVISIBLE);
         homeFrame.setVisibility(View.INVISIBLE);
+        signUpFrame.setVisibility(View.INVISIBLE);
+
         // Set up bottom navigation view listener
         bottomnavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

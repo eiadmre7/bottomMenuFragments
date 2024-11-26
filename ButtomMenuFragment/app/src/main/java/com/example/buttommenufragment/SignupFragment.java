@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
@@ -21,12 +22,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Map;
+
+
 public class SignupFragment extends Fragment {
     private TextInputEditText etemail, etpassword, etconfirmpassword, etname, etphone,etUsername;
     private String email,password,name,phone,username;
     private Button btnSignup,btnCancel;
     private FirebaseAuth mAuth;
-    //private FirebaseFirestore db;
+    private FirebaseFirestore db;
 
 
 
@@ -39,7 +43,7 @@ public class SignupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mAuth = FirebaseAuth.getInstance();
-        //db= FirebaseFirestore.getInstance();
+        db= FirebaseFirestore.getInstance();
         View view= inflater.inflate(R.layout.fragment_signup, container, false);
         btnSignup=view.findViewById(R.id.btn_signUp);
         btnCancel=view.findViewById(R.id.btn_cancel);
@@ -85,8 +89,7 @@ public class SignupFragment extends Fragment {
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(getActivity(), "Sign up success.",
                                         Toast.LENGTH_SHORT).show();
-                                FirebaseUser user;
-                                user = mAuth.getCurrentUser();
+                                addUserToFireStore();
                                 updateUI();
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -96,6 +99,26 @@ public class SignupFragment extends Fragment {
                         }
                     });
         }
+    }
+
+    private void addUserToFireStore() {
+        User user=new User(name,username,phone,email);
+        Map<String, Object> userMap = user.toMap();
+        db.collection("users").document(username).set(userMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getActivity(), "User added to Firestore", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public static boolean isValidEmail(String email) {
